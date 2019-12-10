@@ -39,14 +39,16 @@ namespace TPLinkSmartDevices
             udp = new UdpClient(PORT_NUMBER);
             StartListening();
 
-            return await Task.Delay(timeout).ContinueWith(t =>
+            await Task.Delay(timeout).ContinueWith(t =>
             {
                 discoveryComplete = true;
                 udp.Close();
                 udp = null;
 
                 return DiscoveredDevices;
-            });
+            }).ConfigureAwait(false);
+
+            return DiscoveredDevices;
         }
 
         private void StartListening()
